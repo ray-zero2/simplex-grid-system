@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { threadId } from 'worker_threads';
 import { Grid } from './objects/Grid'
 
 interface ViewProps {
@@ -48,9 +47,7 @@ export class App {
 
   render(deltaTime) {
     this.time = deltaTime;
-    this.grid.object.rotation.x += 0.007
-    this.grid.object.rotation.y += 0.03
-    this.grid.object.rotation.z += 0.012
+    this.grid.update(deltaTime);
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -67,14 +64,15 @@ export class App {
     console.log('resize');
     this.renderer.domElement.style.width = '100vw';
     this.renderer.domElement.style.height = '300px'
+
     const width = this.renderer.domElement.clientWidth;
     const height = this.renderer.domElement.clientHeight;
     this.renderer.domElement.width = width ;
     this.renderer.domElement.height = height;
     this.viewProps.width = width;
     this.viewProps.height = height;
-    this.renderer.setSize(width, height);
 
+    this.renderer.setSize(width, height);
     this.camera.aspect = width/height;
     this.camera.updateProjectionMatrix()
   }
@@ -87,7 +85,7 @@ export class App {
     this.renderer.setPixelRatio(this.viewProps.dpr);
     this.renderer.setClearColor(0x000000, 1.0);
 
-    this.resize()
+    this.resize();
 
 
 

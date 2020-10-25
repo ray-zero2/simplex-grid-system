@@ -1,75 +1,107 @@
 import * as THREE from 'three';
-import { Octahedron } from './objects/Octahedron';
-import { LightOctahedron } from './objects/LightOctahedron';
-// import Ground from './Ground';
-// import SkyOctahedronShell from './SkyOctahedronShell';
-// import SkyOctahedron from './SkyOctahedron';
+import { threadId } from 'worker_threads';
+import { Grid } from './objects/Grid'
+
+interface ViewProps {
+  width: number;
+  height: number;
+  dpr: number;
+}
 
 export class App {
   canvasElement: HTMLCanvasElement;
-  renderer: THREE.WebGLRenderer;
+  viewProps: ViewProps
+  renderer: THREE.WebGL1Renderer;
   scene: THREE.Scene;
-  camera: THREE.Camera;
-  lightHemi: THREE.HemisphereLight;
-  lightPoint: THREE.PointLight;
+  camera: THREE.PerspectiveCamera;
+  grid: Grid;
   clock: THREE.Clock;
   time: number;
-  octahedron: Octahedron;
-  lightOctahedron: LightOctahedron;
 
-  constructor(canvasElement: HTMLCanvasElement) {
-    this.canvasElement = canvasElement;
-    this.renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      canvas: this.canvasElement
+  constructor(selector: string = '.canvas-wrapper') {
+    this.renderer = new THREE.WebGL1Renderer({
+      antialias: true
     });
+    const canvasWrapper = document.querySelector(selector);
+    canvasWrapper.append(this.renderer.domElement)
+
+    this.viewProps = {
+      width: this.renderer.domElement.clientWidth,
+      height: this.renderer.domElement.clientHeight,
+      dpr: Math.min(devicePixelRatio, 2 || 1),
+    };
+
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(
       45,
-      document.body.clientWidth / window.innerHeight,
+      this.viewProps.width/this.viewProps.height,
       1,
-      10000
-    );
+      1000
+      )
+
     this.clock = new THREE.Clock();
+    this.grid = new Grid();
     this.time = 0;
-    this.lightHemi = new THREE.HemisphereLight(0xffffff, 0x666666, 5);
-    this.lightPoint = new THREE.PointLight(0xff0000, 4, 1000);
-    this.octahedron = new Octahedron(100, 3);
-    this.lightOctahedron = new LightOctahedron(60, 3);
     this.init();
+    this.bind();
   }
 
-  render() {
-    const time = this.clock.getDelta();
-    // this.time += 0.00007;
-    // console.log(time);
-    this.octahedron.render(time);
-    // this.skyOctahedron.render(time);
-    // this.skyOctahedronShell.render(time);
+  render(deltaTime) {
+    this.time = deltaTime;
+    this.grid.object.rotation.x += 0.007
+    this.grid.object.rotation.y += 0.03
+    this.grid.object.rotation.z += 0.012
     this.renderer.render(this.scene, this.camera);
-    requestAnimationFrame(this.render.bind(this));
+  }
+
+  animate() {
+    const deltaTime = this.clock.getDelta();
+    this.render(deltaTime)
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   // renderLoop() {
   //   this.render();
   // }
+  resize() {
+    console.log('resize');
+    this.renderer.domElement.style.width = '100vw';
+    this.renderer.domElement.style.height = '300px'
+    const width = this.renderer.domElement.clientWidth;
+    const height = this.renderer.domElement.clientHeight;
+    this.renderer.domElement.width = width ;
+    this.renderer.domElement.height = height;
+    this.viewProps.width = width;
+    this.viewProps.height = height;
+    this.renderer.setSize(width, height);
+
+    this.camera.aspect = width/height;
+    this.camera.updateProjectionMatrix()
+  }
+
+  bind() {
+    window.addEventListener('resize', this.resize.bind(this));
+  }
 
   init() {
-    console.log('init');
-
-    this.renderer.setSize(document.body.clientWidth, window.innerHeight);
+    this.renderer.setPixelRatio(this.viewProps.dpr);
     this.renderer.setClearColor(0x000000, 1.0);
-    this.camera.position.z = 700;
-    // this.camera.position.y = -50;
 
-    // this.lightHemi.position.set(0, 10, 10);
-    this.lightPoint.position.set(0, 0, 0);
+    this.resize()
 
-    // this.scene.add(this.lightHemi);
-    // const pointLightHelper = new THREE.PointLightHelper(this.lightPoint, 1);
-    // this.scene.add(pointLightHelper);
-    this.scene.add(this.octahedron.object);
+
+
+    // this.canvasElement.width = this.canvasElement;
+    // this.renderer.domElement.height = this.viewProps.height;
+
+    this.grid.object.position.x = 0;
+    this.grid.object.position.z = 0;
+
+    this.scene.add(this.grid.object)
+    this.camera.position.x = 0;
+    this.camera.position.y = 0;
+    this.camera.position.z = 100;
     this.clock.start();
-    this.render();
+    this.animate();
   }
 }

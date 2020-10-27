@@ -21,7 +21,7 @@ export class Grid {
   }
 
   private createGeometry() {
-    const geometry = new PointBufferGeometry(1, 1, 20);
+    const geometry = new PointBufferGeometry(1, 1, 10);
     return geometry;
   }
 

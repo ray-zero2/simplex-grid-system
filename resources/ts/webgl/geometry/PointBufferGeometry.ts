@@ -27,7 +27,7 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
         colors.push(1) //g
         colors.push(1) //b
         uvs.push(0) //x
-        uvs.push(0) //y
+        uvs.push(1) //y
 
         //right top
         vertices.push(size/2) //x
@@ -37,7 +37,7 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
         colors.push(1) //g
         colors.push(1) //b
         uvs.push(1) //x
-        uvs.push(0) //y
+        uvs.push(1) //y
 
         //right bottom
         vertices.push(size/2) //x
@@ -47,7 +47,7 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
         colors.push(1) //g
         colors.push(1) //b
         uvs.push(1) //x
-        uvs.push(1) //y
+        uvs.push(0) //y
 
         //left bottom
         vertices.push(-size/2) //x
@@ -57,7 +57,7 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
         colors.push(1) //g
         colors.push(1) //b
         uvs.push(0) //x
-        uvs.push(1) //y
+        uvs.push(0) //y
 
         //三角メッシュ x 2で四角メッシュ生成
         const indexOffset = i * j * 4 - 4;

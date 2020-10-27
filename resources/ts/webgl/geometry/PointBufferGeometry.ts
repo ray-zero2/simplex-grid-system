@@ -10,10 +10,10 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
 
   private createParams(rowNums: number, columnNums: number, maxSize: number) {
 
-    const vertices = [];
-    const colors = [];
-    const uvs = [];
-    const indices = [];
+    const vertices: number[] = [];
+    const colors: number[] = [];
+    const uvs: number[] = [];
+    const indices: number[] = [];
 
     for(let i = 1; i  <= rowNums; i++) {
       for(let j = 1; j <= columnNums; j ++) {

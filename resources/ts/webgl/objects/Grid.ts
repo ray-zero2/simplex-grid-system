@@ -7,22 +7,28 @@ export class Grid {
   time: number;
   object: THREE.Points;
   size: number;
+  rowNums: number;
+  columnNums: number;
 
-  constructor() {
+  constructor(size: number, rowNums: number, columnNums: number) {
     this.time = 0;
+    this.size = size;
+    this.rowNums = rowNums;
+    this.columnNums = columnNums;
     this.object = this.createMesh();
-    this.size = 1000;
+    console.log(this.object.material);
   }
 
   update(deltaTime: number) {
     this.time += deltaTime;
+    this.object.material.uniforms.time.value = this.time;
     // this.object.rotation.x += 0.007
     // this.object.rotation.y += 0.03
     // this.object.rotation.z += 0.012
   }
 
   private createGeometry() {
-    const geometry = new PointBufferGeometry(this.size, 1, 1, 10);
+    const geometry = new PointBufferGeometry(this.size, this.rowNums, this.columnNums);
     return geometry;
   }
 
@@ -31,8 +37,10 @@ export class Grid {
       vertexShader: vs,
       fragmentShader: fs,
       uniforms: {
-        time: { type: 'f', value: 0 } as THREE.IUniform,
-        size: { type: 'f', value: this.size } as THREE.IUniform
+        time: { type: 'f', value: this.time } as THREE.IUniform,
+        width: { type: 'f', value: this.size } as THREE.IUniform,
+        rowNums: { type: 'f', value: this.rowNums } as THREE.IUniform,
+        columnNums: { type: 'f', value: this.columnNums } as THREE.IUniform
       },
       side: THREE.DoubleSide
     });

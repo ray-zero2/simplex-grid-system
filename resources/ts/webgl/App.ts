@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { LogLuvEncoding } from 'three';
 import { Grid } from './objects/Grid'
 
 interface ViewProps {
@@ -39,7 +40,7 @@ export class App {
       )
 
     this.clock = new THREE.Clock();
-    this.grid = new Grid();
+    this.grid = new Grid(1000, 200, 1);
     this.time = 0;
     this.init();
     this.bind();
@@ -52,6 +53,8 @@ export class App {
   }
 
   animate() {
+    console.log('animate');
+
     const deltaTime = this.clock.getDelta();
     this.render(deltaTime)
     requestAnimationFrame(this.animate.bind(this));

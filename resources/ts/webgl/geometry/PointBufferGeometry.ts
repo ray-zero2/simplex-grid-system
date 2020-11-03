@@ -4,15 +4,17 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
   constructor(
     public size: number,
     public rowNums: number,
-    public columnNums: number,
-    public maxSize: number = 20
+    public columnNums: number
   ) {
     super();
-    this.createParams(rowNums, columnNums, maxSize);
+    console.log(this.rowNums);
+    console.log(this.columnNums);
+
+    this.createParams(rowNums, columnNums);
     this.computeVertexNormals();
   }
 
-  private createParams(rowNums: number, columnNums: number, maxSize: number) {
+  private createParams(rowNums: number, columnNums: number) {
 
     const position: number[] = [];
     const colors: number[] = [];
@@ -32,13 +34,14 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
 
         const rowIndex = i - 1;
         const columnIndex = j - 1;
+        // const rowIndex = (i - 1) / this.size;
+        // const columnIndex = (j - 1) / this.size;
         indices.push(rowIndex, columnIndex);
-
-        const colors = new THREE.Color
       }
     }
+    console.log(indices);
+
     this.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3));
-    // this.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
     this.setAttribute('dotSize', new THREE.BufferAttribute(new Float32Array(dotSize), 1));
     this.setAttribute('indices', new THREE.BufferAttribute(new Float32Array(indices), 2));
   }

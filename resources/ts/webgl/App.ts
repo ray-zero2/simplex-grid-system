@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { LogLuvEncoding } from 'three';
-import { Grid } from './objects/Grid'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { Grid } from './objects/Grid';
 
 interface ViewProps {
   width: number;
@@ -17,6 +17,7 @@ export class App {
   grid: Grid;
   clock: THREE.Clock;
   time: number;
+  controls: OrbitControls;
 
   constructor(selector: string = '.canvas-wrapper') {
     this.renderer = new THREE.WebGL1Renderer({
@@ -42,12 +43,14 @@ export class App {
     this.clock = new THREE.Clock();
     this.grid = new Grid(1000, 200, 20);
     this.time = 0;
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.init();
     this.bind();
   }
 
   render(deltaTime) {
     this.time = deltaTime;
+    this.controls.update();
     this.grid.update(deltaTime);
     this.renderer.render(this.scene, this.camera);
   }
@@ -90,7 +93,8 @@ export class App {
 
     this.resize();
 
-
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.1;
 
     // this.canvasElement.width = this.canvasElement;
     // this.renderer.domElement.height = this.viewProps.height;

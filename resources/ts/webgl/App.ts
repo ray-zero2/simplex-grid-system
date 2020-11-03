@@ -40,7 +40,7 @@ export class App {
       )
 
     this.clock = new THREE.Clock();
-    this.grid = new Grid(1000, 200, 1);
+    this.grid = new Grid(1000, 200, 20);
     this.time = 0;
     this.init();
     this.bind();

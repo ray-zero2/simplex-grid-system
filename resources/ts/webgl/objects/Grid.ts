@@ -22,9 +22,6 @@ export class Grid {
   update(deltaTime: number) {
     this.time += deltaTime;
     this.object.material.uniforms.time.value = this.time;
-    // this.object.rotation.x += 0.007
-    // this.object.rotation.y += 0.03
-    // this.object.rotation.z += 0.012
   }
 
   private createGeometry() {

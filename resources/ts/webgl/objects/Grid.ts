@@ -5,12 +5,13 @@ import fs from '../shaders/grid.frag';
 
 export class Grid {
   time: number;
-  object: THREE.Mesh
+  object: THREE.Points;
+  size: number;
 
   constructor() {
     this.time = 0;
     this.object = this.createMesh();
-
+    this.size = 1000;
   }
 
   update(deltaTime: number) {
@@ -21,7 +22,7 @@ export class Grid {
   }
 
   private createGeometry() {
-    const geometry = new PointBufferGeometry(1, 1, 10);
+    const geometry = new PointBufferGeometry(this.size, 1, 1, 10);
     return geometry;
   }
 
@@ -30,7 +31,8 @@ export class Grid {
       vertexShader: vs,
       fragmentShader: fs,
       uniforms: {
-        time: { type: 'f', value: 0 } as THREE.IUniform
+        time: { type: 'f', value: 0 } as THREE.IUniform,
+        size: { type: 'f', value: this.size } as THREE.IUniform
       },
       side: THREE.DoubleSide
     });
@@ -40,7 +42,7 @@ export class Grid {
   private createMesh() {
     const geometry = this.createGeometry();
     const material = this.createMaterial();
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new THREE.Points(geometry, material);
     return mesh;
   }
 }

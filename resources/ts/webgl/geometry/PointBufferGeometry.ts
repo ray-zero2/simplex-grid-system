@@ -1,8 +1,12 @@
 import * as THREE from 'three';
 
 export class PointBufferGeometry extends THREE.BufferGeometry {
-
-  constructor(rowNums: number, columnNums: number, maxSize: number = 20) {
+  constructor(
+    public size: number,
+    public rowNums: number,
+    public columnNums: number,
+    public maxSize: number = 20
+  ) {
     super();
     this.createParams(rowNums, columnNums, maxSize);
     this.computeVertexNormals();
@@ -10,71 +14,32 @@ export class PointBufferGeometry extends THREE.BufferGeometry {
 
   private createParams(rowNums: number, columnNums: number, maxSize: number) {
 
-    const vertices: number[] = [];
+    const position: number[] = [];
     const colors: number[] = [];
-    const uvs: number[] = [];
+    const dotSize: number[] = [];
     const indices: number[] = [];
 
     for(let i = 1; i  <= rowNums; i++) {
       for(let j = 1; j <= columnNums; j ++) {
-        const size = maxSize / columnNums * j;
 
-        //left top
-        vertices.push(-size/2) //x
-        vertices.push(size/2) //y
-        vertices.push(0) //x
-        colors.push(1) //r
-        colors.push(1) //g
-        colors.push(1) //b
-        uvs.push(0) //x
-        uvs.push(1) //y
+        const x = 0;
+        const y = 0;
+        const z = 0;
+        position.push(x, y, z);
 
-        //right top
-        vertices.push(size/2) //x
-        vertices.push(size/2) //y
-        vertices.push(0) //x
-        colors.push(1) //r
-        colors.push(1) //g
-        colors.push(1) //b
-        uvs.push(1) //x
-        uvs.push(1) //y
+        const size = 1;
+        dotSize.push(size);
 
-        //right bottom
-        vertices.push(size/2) //x
-        vertices.push(-size/2) //y
-        vertices.push(0) //x
-        colors.push(1) //r
-        colors.push(1) //g
-        colors.push(1) //b
-        uvs.push(1) //x
-        uvs.push(0) //y
+        const rowIndex = i - 1;
+        const columnIndex = j - 1;
+        indices.push(rowIndex, columnIndex);
 
-        //left bottom
-        vertices.push(-size/2) //x
-        vertices.push(-size/2) //y
-        vertices.push(0) //x
-        colors.push(1) //r
-        colors.push(1) //g
-        colors.push(1) //b
-        uvs.push(0) //x
-        uvs.push(0) //y
-
-        //三角メッシュ x 2で四角メッシュ生成
-        const indexOffset = i * j * 4 - 4;
-        //左上のメッシュ
-        indices.push(indexOffset);
-        indices.push(indexOffset + 1);
-        indices.push(indexOffset + 3);
-
-        //右下のメッシュ
-        indices.push(indexOffset + 1);
-        indices.push(indexOffset + 2);
-        indices.push(indexOffset + 3);
+        const colors = new THREE.Color
       }
     }
-    this.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
-    this.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
-    this.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
-    this.setIndex(new THREE.BufferAttribute(new Uint16Array(indices), 1));
+    this.setAttribute('position', new THREE.BufferAttribute(new Float32Array(position), 3));
+    // this.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
+    this.setAttribute('dotSize', new THREE.BufferAttribute(new Float32Array(dotSize), 1));
+    this.setAttribute('indices', new THREE.BufferAttribute(new Float32Array(indices), 2));
   }
 }

@@ -1529,17 +1529,6 @@ eval("\nvar exportTypedArrayMethod = __webpack_require__(/*! ../internals/array-
 
 /***/ }),
 
-/***/ "./node_modules/core-js/modules/es.typed-array.uint16-array.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/core-js/modules/es.typed-array.uint16-array.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var createTypedArrayConstructor = __webpack_require__(/*! ../internals/typed-array-constructor */ \"./node_modules/core-js/internals/typed-array-constructor.js\");\n\n// `Uint16Array` constructor\n// https://tc39.github.io/ecma262/#sec-typedarray-objects\ncreateTypedArrayConstructor('Uint16', function (init) {\n  return function Uint16Array(data, byteOffset, length) {\n    return init(this, data, byteOffset, length);\n  };\n});\n\n\n//# sourceURL=webpack:///./node_modules/core-js/modules/es.typed-array.uint16-array.js?");
-
-/***/ }),
-
 /***/ "./node_modules/core-js/modules/web.dom-collections.iterator.js":
 /*!**********************************************************************!*\
   !*** ./node_modules/core-js/modules/web.dom-collections.iterator.js ***!

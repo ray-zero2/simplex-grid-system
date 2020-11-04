@@ -105,7 +105,7 @@ export class App {
     this.scene.add(this.grid.object)
     this.camera.position.x = 0;
     this.camera.position.y = 0;
-    this.camera.position.z = 10;
+    this.camera.position.z = 200;
     this.clock.start();
     this.animate();
   }

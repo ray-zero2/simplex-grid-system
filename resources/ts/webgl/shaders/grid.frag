@@ -14,6 +14,10 @@ void main() {
   vec2 centeredCoord = vec2((coord.x * 2.0 - 1.0) / 2.0, (coord.y * 2.0 - 1.0) / 2.0);
   vec4 circle = dotForm(centeredCoord, 0.5);
   vec4 distColor = circle * vec4(vIndices, 0.0, 1.0);
-  // gl_FragColor = circle;
-  gl_FragColor = distColor;
+
+  if(distColor.a == 0.0) {
+    discard;
+  } else {
+    gl_FragColor = distColor;
+  }
 }

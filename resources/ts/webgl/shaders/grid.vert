@@ -20,8 +20,8 @@ float SEPARATION = RATIO / 2.0;
 vec3 waveForm(vec3 originalPosition) {
   vec3 pos = originalPosition;
   pos.x = indices.x * SEPARATION - ( rowNums * SEPARATION ) / 2.0 ;
-  pos.y = sin((time * 2.0 + indices.x + indices.y) / 5.0) * 15.0;
-  pos.z = indices.y *  SEPARATION * 5.0 - ( columnNums *  SEPARATION * 5.0 ) / 2.0 ;
+  pos.y = sin((time * 2.0 + indices.x * indices.y / 200.0) / 5.0) * 15.0;
+  pos.z = indices.y *  SEPARATION * 3.0 - ( columnNums *  SEPARATION * 5.0 ) / 3.0 ;
   // pos.z = -indices.y * SEPARATION * 5.0;
   return pos;
 }

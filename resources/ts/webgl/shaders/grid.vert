@@ -18,15 +18,6 @@ float RATIO = 4.0;
 float SEPARATION = RATIO / 2.0;
 float PI = 3.14;
 
-float squareWave(float x){
-    return 2.*(step(0.,sin(x*PI))-.5);
-}
-
-float degToRad(float degree) {
-  float radian = degree * (PI / 180.0);
-  return radian;
-}
-
 vec3 rotate(vec3 p, float angle, vec3 axis){
     vec3 a = normalize(axis);
     float s = sin(angle);
@@ -56,13 +47,13 @@ vec3 waveForm(vec3 originalPosition) {
 
 vec3 sphereForm(vec3 originalPosition, float r) {
   vec3 pos = originalPosition;
-  float rad1 = degToRad(indices.x / rowNums * 360.0);
-  float rad2 = degToRad(indices.y / columnNums * 360.0);
+  float rad1 = radians(indices.x / rowNums * 360.0);
+  float rad2 = radians(indices.y / columnNums * 360.0);
   pos.x = cos(rad1) * cos(rad2) * r;
   pos.y = cos(rad1) * sin(rad2) * r;
   pos.z = sin(rad1) * r;
 
-  vec3 distPos = rotate(pos, degToRad(time * 100.0), vec3(0.0, 1.0, 0.0));
+  vec3 distPos = rotate(pos, radians(time * 100.0), vec3(0.0, 1.0, 0.0));
   return distPos;
 }
 

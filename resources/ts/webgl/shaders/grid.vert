@@ -18,6 +18,8 @@ float RATIO = 4.0;
 float SEPARATION = RATIO / 2.0;
 float PI = 3.14;
 
+#pragma glslify: snoise2 = require(glsl-noise/simplex/2d.glsl);
+
 vec3 rotate(vec3 p, float angle, vec3 axis){
     vec3 a = normalize(axis);
     float s = sin(angle);
@@ -37,10 +39,10 @@ vec3 rotate(vec3 p, float angle, vec3 axis){
     return m * p;
 }
 
-vec3 waveForm(vec3 originalPosition) {
+vec3 waveForm(vec3 originalPosition, float noise) {
   vec3 pos = originalPosition;
   pos.x = indices.x * SEPARATION - ( rowNums * SEPARATION ) / 2.0 ;
-  pos.y = sin((time * 10.0 + indices.x * indices.y / 200.0) / 5.0) * 15.0;
+  pos.y = cos(noise * 20.0 + pos.x * pos.y + time * 2.5) * 10.0;
   pos.z = indices.y * SEPARATION * 2.0 - ( columnNums *  SEPARATION * 2.0) / 2.0 ;
   return pos;
 }
@@ -58,13 +60,17 @@ vec3 sphereForm(vec3 originalPosition, float r) {
 }
 
 void main() {
-
+  // float now = max(0.0, time);
   vec3 pos = position;
+  vec2 normalizedIndices = vec2(indices.x / rowNums, indices.y / columnNums);
+  // float noise = 1.0;
+  float noise = snoise2(normalizedIndices);
   float pointSize = dotSize * RATIO;
 
-  vec3 wavePosition = waveForm(pos);
+  vec3 wavePosition = waveForm(pos,noise);
   vec3 spherePosition = sphereForm(pos, 50.0);
-  float mixFactor = (clamp(15.0 * cos(time / 3.0 ), -1.0, 1.0) + 1.0 ) / 2.0;
+  float mixFactor = (clamp(15.0 * cos((time + normalizedIndices.x * normalizedIndices.y / 0.8) / 5.0 ), -1.0, 1.0) + 1.0 ) / 2.0;
+  // float mixFactor = (clamp(15.0 * cos((time ) / 2.5 ), -1.0, 1.0) + 1.0 ) / 2.0;
   vec3 distPosition = mix(spherePosition, wavePosition, mixFactor);
 
   vec4 mvPosition = modelViewMatrix * vec4( distPosition, 1.0 );
